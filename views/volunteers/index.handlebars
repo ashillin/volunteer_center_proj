@@ -1,6 +1,7 @@
 <h1>{{title}}</h1>
+<a href="/volunteers/form">Add a new Volunteer</a>
 <ul>
  {{#each volunteers}}
-   <li>{{this}}</li>
+   <li>{{this.firstName}} {{this.lastName}}</li>
  {{/each}}
 </ul>

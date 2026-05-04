@@ -1,5 +1,6 @@
 //Framework Imports
 const express = require('express');
+const bodyParser = require('body-parser');
 
 
 //Application Imports
@@ -13,6 +14,8 @@ const port = 3000;
 const handlebars = require('express-handlebars').create();
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 //Application Setup
 app.use('/', indexRouter);
