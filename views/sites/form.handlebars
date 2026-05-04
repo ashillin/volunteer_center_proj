@@ -19,7 +19,7 @@
     <select name="volunteerIndex" id="volunteerIndex">
       <option disabled selected value>-- select Volunteers --</option>
       {{#each volunteers}}
-        <option value="{{@index}}">
+        <option value="{{@index}}" {{#if (and @root.site && (in @root.site.volunteerIndex == @index))}}selected{{/if}}>
           {{this.firstName}} {{this.lastName}}
         </option>
       {{/each}}
