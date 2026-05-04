@@ -22,9 +22,6 @@ app.use('/', indexRouter);
 app.use('/volunteers', volunteersRouter);
 app.use('/sites', sitesRouter);
 
-// app.use('/', function(req, res, next) {
-//   res.send("<h1>Welcome to VolunteerCenter</h1>");
-// });
 
 // custom 404 page
 app.use((req, res) => {

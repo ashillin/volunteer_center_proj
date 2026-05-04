@@ -8,4 +8,19 @@ exports.add = (site) => {
     sites.push(site);
 };
 
+exports.get = (idx) => {
+  return sites[idx];
+};
+
+exports.upsert = (site) => {
+  if (site.id) {
+    exports.update(site);
+  } else {
+    exports.add(site);
+  }
+};
+
+exports.update = (site) => {
+  sites[site.id] = site;
+}
   exports.all = sites;

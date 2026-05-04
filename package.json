@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
     "scripts": {
-    "start": "node ./volunteerCenter.js",
-    "dev": "./node_modules/nodemon/bin/nodemon.js ./volunteerCenter.js"
+    "start": "node ./volunteercenter.js",
+    "dev": "./node_modules/nodemon/bin/nodemon.js ./volunteercenter.js"
   },
   "dependencies": {
     "body-parser": "^2.2.2",

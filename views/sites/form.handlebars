@@ -1,11 +1,18 @@
-<form action="/sites/create" role="form" method="post">
+<form action="/sites/upsert" role="form" method="post">
+  <div><h1>Add a new Site</h1></div>
+  {{#if site}}
+    <div>
+      <h2>{{site.siteName}} {{site.siteAddy}}</h2>
+      <input type="hidden" name="id" value="{{siteIndex}}">
+    </div>
+  {{/if}}
   <div>
     <label for="site_name">Site Name</label>
-    <input type="text" id="site_name" name="siteName">
+    <input type="text" id="site_name" name="siteName" {{#if site}}value="{{site.siteName}}"{{/if}}>
   </div>
   <div>
     <label for="site_addy">Address</label>
-    <input type="text" id="site_addy" name="siteAddy">
+    <input type="text" id="site_addy" name="siteAddy" {{#if site}}value="{{site.siteAddy}}"{{/if}}>
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>

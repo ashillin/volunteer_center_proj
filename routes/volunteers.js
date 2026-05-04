@@ -4,17 +4,23 @@ const Volunteer = require('../models/volunteer');
 
 router.get('/', function(req, res, next) {
   const volunteers = Volunteer.all;
-  res.render('volunteers/index', { title: 'VoluneerCenter || Volunteers', volunteers: volunteers });
+  res.render('volunteers/index', { title: 'VolunteerCenter || Volunteers', volunteers: volunteers });
 });
 
 router.get('/form', async (req, res, next) => {
-  res.render('volunteers/form', { title: 'VoluneerCenter || Volunteers' });
+  res.render('volunteers/form', { title: 'VolunteerCenter || Volunteers', volunteer: volunteer});
 });
 
-router.post('/create', async (req, res, next) => {
+router.post('/upsert', async (req, res, next) => {
   console.log('body: ' + JSON.stringify(req.body))
-  Volunteer.add(req.body);
-  res.redirect(303, '/volunteers')
+  Volunteer.upsert(req.body);
+  res.redirect(303, "/volunteers")
+});
+
+router.get('/edit', async (req, res, next) => {
+  let volunteerIndex = req.query.id;
+  let volunteer = Volunteer.get(volunteerIndex);
+  res.render('volunteers/form', { title: 'VolunteerCenter || Volunteers', volunteer: volunteer, volunteerIndex: volunteerIndex  });
 });
 
 

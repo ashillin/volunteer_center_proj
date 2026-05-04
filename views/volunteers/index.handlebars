@@ -2,6 +2,7 @@
 <a href="/volunteers/form">Add a new Volunteer</a>
 <ul>
  {{#each volunteers}}
-   <li>{{this.firstName}} {{this.lastName}}</li>
+   <li>{{@index}} - {{this.firstName}} {{this.lastName}}
+    <a href="/volunteers/edit?id={{@index}}">Edit</a>
  {{/each}}
 </ul>
