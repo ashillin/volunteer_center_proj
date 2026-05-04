@@ -14,5 +14,17 @@
     <label for="site_addy">Address</label>
     <input type="text" id="site_addy" name="siteAddy" {{#if site}}value="{{site.siteAddy}}"{{/if}}>
   </div>
+  <div class="mb-3">
+    <label for="volunteerIndex">Volunteers</label>
+    <select name="volunteerIndex" id="volunteerIndex">
+      <option disabled selected value>-- select Volunteers --</option>
+      {{#each volunteers}}
+        <option value="{{@index}}">
+          {{this.firstName}} {{this.lastName}}
+        </option>
+      {{/each}}
+    </select>
+  </div>
+
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
