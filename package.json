@@ -1,0 +1,9 @@
+{
+  "name": "volunteercenter",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "^5.2.1",
+    "express-handlebars": "^9.0.1"
+  }
+}
