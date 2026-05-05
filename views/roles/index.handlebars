@@ -1,0 +1,8 @@
+<h1>{{title}}</h1>
+<a href="/roles/form">Add a new Role</a>
+<ul>
+ {{#each roles}}
+   <li><a href="/roles/show/{{@index}}">{{@index}} - {{this.title}}</a>
+    <a href="/roles/edit?id={{@index}}">Edit</a></li>
+ {{/each}}
+</ul>

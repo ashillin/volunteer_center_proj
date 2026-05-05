@@ -4,12 +4,15 @@ const bodyParser = require('body-parser');
 const { credentials } = require('./config');
 const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
+const csrf = require('csurf');
 
 
 //Application Imports
 const indexRouter = require('./routes/index');
 const volunteersRouter = require('./routes/volunteers');
 const sitesRouter = require('./routes/sites');
+const usersRouter = require('./routes/users');
+const rolesRouter = require('./routes/roles');
 
 //Framework Setup
 const app = express();
@@ -44,6 +47,12 @@ app.use(expressSession({
   saveUninitialized: false,
   cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
 }));
+app.use(csrf({ cookie: true }))
+app.use((req, res, next) => {
+  res.locals._csrfToken = req.csrfToken()
+  next();
+})
+
 
 // session configuration
 //make it possible to use flash messages, and pass them to the view
@@ -52,12 +61,19 @@ app.use((req, res, next) => {
   delete req.session.flash;
   next();
 });
+//make the current user available in views
+app.use((req, res, next) => {
+  res.locals.currentUser = req.session.currentUser;
+  next();
+});
 
 
 //Application Setup
 app.use('/', indexRouter);
 app.use('/volunteers', volunteersRouter);
 app.use('/sites', sitesRouter);
+app.use('/users', usersRouter);
+app.use('/roles', rolesRouter);
 
 
 // custom 404 page
