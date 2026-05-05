@@ -1,6 +1,9 @@
 //Framework Imports
 const express = require('express');
 const bodyParser = require('body-parser');
+const { credentials } = require('./config');
+const cookieParser = require('cookie-parser');
+const expressSession = require('express-session');
 
 
 //Application Imports
@@ -34,6 +37,21 @@ var handlebars = require('express-handlebars').create({
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser(credentials.cookieSecret));
+app.use(expressSession({
+  secret: credentials.cookieSecret,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
+}));
+
+// session configuration
+//make it possible to use flash messages, and pass them to the view
+app.use((req, res, next) => {
+  res.locals.flash = req.session.flash;
+  delete req.session.flash;
+  next();
+});
 
 
 //Application Setup

@@ -1,7 +1,7 @@
 <h1>{{site.siteName}}</h1>
-{{#if volunteer}}
-<p>created by {{volunteer.firstName}} {{volunteer.lastName}}{{#unless @last}}, {{/unless}}</p>
+{{#if volunteers}}
+<p>Created by {{#each volunteers}}{{this.firstName}} {{this.lastName}}{{#unless @last}}, {{/unless}}{{/each}}</p>
 {{/if}}
 <p>
-  Originally created by {{volunteer.firstName}}
+  Originally created on {{site.createDate}}
 </p>

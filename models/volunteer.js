@@ -21,7 +21,8 @@ exports.upsert = (volunteer) => {
 };
 
 exports.update = (volunteer) => {
+  volunteer.id = parseInt(volunteer.id);
   volunteers[volunteer.id] = volunteer;
-}
+};
 
   exports.all = volunteers;

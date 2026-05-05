@@ -2,7 +2,7 @@
 <a href="/sites/form">Add a new Site</a>
 <ul>
  {{#each sites}}
-   <li><a href="/sites/show/{{@index}}">{{@index}}- {{this.siteName}} {{this.siteAddy}}</a> 
+   <li><a href="/sites/show/{{@index}}">{{@index}} - {{this.siteName}} {{this.siteAddy}}</a> 
     <a href="/sites/edit?id={{@index}}">Edit</a></li>
  {{/each}}
 </ul>

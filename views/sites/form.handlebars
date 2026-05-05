@@ -3,7 +3,7 @@
   {{#if site}}
     <div>
       <h2>{{site.siteName}} {{site.siteAddy}}</h2>
-      <input type="hidden" name="id" value="{{siteIndex}}">
+      <input type="hidden" name="id" value="{{siteId}}">
     </div>
   {{/if}}
   <div>
@@ -14,12 +14,16 @@
     <label for="site_addy">Address</label>
     <input type="text" id="site_addy" name="siteAddy" {{#if site}}value="{{site.siteAddy}}"{{/if}}>
   </div>
+    <div>
+    <label for="creat_date">Date Created</label>
+    <input type="text" id="create_date" name="createDate" {{#if site}}value="{{site.createDate}}"{{/if}}>
+  </div>
   <div class="mb-3">
-    <label for="volunteerIndex">Volunteers</label>
-    <select name="volunteerIndex" id="volunteerIndex">
+    <label for="volunteerIds">Volunteers</label>
+    <select name="volunteerIds" multiple id="volunteerIds">
       <option disabled selected value>-- select Volunteers --</option>
       {{#each volunteers}}
-        <option value="{{@index}}" {{#if (and @root.site && (in @root.site.volunteerIndex == @index))}}selected{{/if}}>
+        <option value="{{@index}}" {{#if (and @root.site (in @root.site.volunteerIds @index))}}selected{{/if}}>
           {{this.firstName}} {{this.lastName}}
         </option>
       {{/each}}
