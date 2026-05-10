@@ -1,42 +1,38 @@
-const assignments = [
-  {siteId: "0", userEmail: "ashillin@pratt.edu", title: "Chef"},
-  {siteId: "1", userEmail: "ashillin@pratt.edu", title: "Tech person"},
-  {siteId: "2", userEmail: "ashillin@pratt.edu", title: "Greeter"},
-  {siteId: "3", userEmail: "ashillin@pratt.edu", title: "Greeter"}
-];
+const db = require('../database')
 
-exports.titles = [
-  "Chef","Tech person","Greeter"
-]
 
-exports.add = (assignment) => {
-  assignments.push(assignment);
+exports.add = async (assignment) => {
+    await db.getPool().query("insert into assignments (volunteer_id, site_id, role_id, time_started, time_ended) values ($1, $2, $3, $4, $5);",
+        [assignment.volunteerId, assignment.siteId, assignment.roleId, assignment.timeStarted, assignment.timeEnded]);
 };
 
-exports.get = (siteId, userEmail) => {
-  return assignments.find((assignment) => {
-    return assignment.siteId == siteId && assignment.userEmail == userEmail;
-  });
+exports.get = async (volunteerId, siteId, roleId) => {
+  console.log('Assignment.get called with:', volunteerId, siteId);
+  const { rows } = await db.getPool().query(`select * from assignments where volunteer_id = $1 and site_id = $2`, [volunteerId, siteId])
+  console.log('Assignment.get rows:', rows);
+  return db.camelize(rows)[0]
 };
 
-exports.AllForUser = (userEmail) => {
-  return assignments.filter((assignment) => {
-    return assignment.userEmail == userEmail;
-  });
+exports.AllForUser = async (user) => {
+  console.log('AllForUser called with:', user);
+  const { rows } = await db.getPool().query(
+    `select sites.id, sites.site_name, assignments.time_started, assignments.time_ended, roles.role_name from assignments
+     join volunteers on volunteers.id = assignments.volunteer_id
+     join roles on roles.id = assignments.role_id
+     join sites on sites.id = assignments.site_id
+     where volunteers.id = $1`, [user.volunteerId])
+    return db.camelize(rows)
 };
 
-exports.update = (idx, assignment) => {
-  assignments[idx] = assignment;
-}
+exports.update = async (bookUser) => {
+    await db.getPool().query("update books_users set read_status = $1 where id = $2;",
+        [bookUser.readStatus, bookUser.id]);
+};
 
-exports.upsert = (assignment) => {
-  let idx = assignments.findIndex((bu) => {
-    return bu.siteId == assignment.siteId &&
-           bu.userEmail == assignment.userEmail;
-  });
-  if (idx == -1) {
-    exports.add(assignment);
+exports.upsert = (bookUser) => {
+  if (bookUser.id) {
+    exports.update(bookUser);
   } else {
-    exports.update(idx,assignment);
+    exports.add(bookUser);
   }
-}
+};

@@ -3,6 +3,8 @@ const router = express.Router();
 const User = require('../models/user');
 const Site = require('../models/site');
 const Assignment = require('../models/assignment');
+const Volunteer = require('../models/volunteer');
+const db = require('../database');
 
 
 function IsLoggedIn(req, res) {
@@ -22,7 +24,7 @@ function isNotLoggedIn(req, res) {
   if (! req.session.currentUser) {
     req.session.flash = {type: 'info',intro: 'Err!',
       message: 'You are not logged in yet'};
-    res.redirect(303, '/');
+    res.redirect(303, 'users/login');
     return true;
   }
   return false;
@@ -41,7 +43,7 @@ router.post('/register', async (req, res, next) => {
   const user = await User.getByEmail(req.body.email)
   if (user) {
     res.render('users/register', {
-      title: 'VolunteerCenter || Login',
+      title: 'VolunteerCenter || Registration',
       flash: {
         type: 'danger',
         intro: 'Error!',
@@ -49,6 +51,21 @@ router.post('/register', async (req, res, next) => {
     });
   } else {
     await User.add(req.body);
+    const volunteer = await Volunteer.add({ 
+      firstName: req.body.firstName, 
+      lastName: req.body.lastName 
+    });
+        console.log('created volunteer:', volunteer); // ✅ add this
+    await db.getPool().query(
+      "UPDATE users SET volunteer_id = $1 WHERE email = $2",
+      [volunteer.id, req.body.email]
+    );
+    const updatedUser = await User.getByEmail(req.body.email);
+    console.log('updated user:', updatedUser); // ✅ add this
+    await db.getPool().query(
+    "UPDATE users SET volunteer_id = $1 WHERE email = $2",
+    [volunteer.id, req.body.email]
+    );
     req.session.flash = {
       type: 'info',
       intro: 'Success!',
@@ -62,9 +79,11 @@ router.post('/register', async (req, res, next) => {
 router.get('/login', async (req, res, next) => {
   res.render('users/login', { title: 'VolunteerCenter || Login' });
 });
+
 router.post('/login', async (req, res, next) => {
   console.log('body: ' + JSON.stringify(req.body));
   const user = await User.login(req.body)
+  console.log('logged in user:', user); // ✅ add this
   if (user) {
     req.session.currentUser = user
     req.session.flash = {
@@ -98,7 +117,7 @@ router.get('/profile', async (req, res, next) => {
   if (isNotLoggedIn(req, res)) {
     return
   }
-  const assignments = await Assignment.AllForUser(req.session.currentUser.email);
+  const assignments = await Assignment.AllForUser(req.session.currentUser);
   res.render('users/profile',
     { title: 'VolunteerCenter || Profile',
       user: req.session.currentUser,

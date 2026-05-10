@@ -15,11 +15,11 @@ exports.get = async (id) => {
  return db.camelize(rows)[0]
 };
 
-exports.upsert = (role) => {
+exports.upsert = async (role) => {
   if (role.id) {
     exports.update(role);
   } else {
-    exports.add(role);
+    await exports.add(role);
   }
 };
 

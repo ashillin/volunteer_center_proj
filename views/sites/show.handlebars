@@ -1,29 +1,21 @@
 <h1>{{site.siteName}}</h1>
 {{#if site.volunteers}}
-<p>Created by {{#each site.volunteers}}{{this.firstName}} {{this.lastName}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+<p>Volunteers: {{#each site.volunteers}}{{this.firstName}} {{this.lastName}} -- {{this.roleName}} {{#unless @last}}, {{/unless}}{{/each}}</p>
 {{/if}}
 <p>
   Originally created on {{site.createdAt}} and open from {{site.hoursOp}}
 </p>
+
 {{#if currentUser}}
-<div>
-  <form action="/assignments/upsert" role="form" method="post">
-    <input type="hidden" name="_csrf" value="{{_csrfToken}}">
-    <input type="hidden" name="siteId" value="{{site.id}}">
-    <input type="hidden" name="userId" value="{{currentUser.id}}">
-    {{#if assignment}}
-      <input type="hidden" name="id" value="{{assignment.id}}">
-    {{/if}}
-    <label for="title">Role</label>
-    <select name="title" id="title">
-      {{#unless (and assignment assignment.title)}}
-        <option disabled value selected>-- select role --</option>
-      {{/unless}}
-      {{#each titles}}
-        <option value="{{this}}" {{#if (and @root.assignment (eq @root.assignment.status this))}}selected{{/if}}>{{this}}</option>
-      {{/each}}
-    </select>
-    <button type="submit">Submit</button>
-  </form>
-</div>
+  {{#if assignment}}
+    <button disabled>You already work here!</button>
+  {{else}}
+    <a href="/assignments/form?siteId={{siteId}}">
+      <button>Register to work at this Site!</button>
+    </a>
+  {{/if}}
+{{else}}
+  <a href="/users/login">
+    <button>Register to work at this Site!</button>
+  </a>
 {{/if}}

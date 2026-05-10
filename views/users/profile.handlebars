@@ -1,8 +1,12 @@
-<h1>{{currentUser.name}}</h1>
+<h1>{{currentUser.firstName}} {{currentUser.lastName}}</h1>
 
 My Assignments:
 <ul>
-  {{#each assignments}}
-    <li>{{this.siteName}} -- {{this.roleName}}</li>
-  {{/each}}
+  {{#if assignments}}
+    {{#each assignments}}
+      <li><a href="/sites/show/{{this.id}}">{{this.siteName}}</a> -- {{this.roleName}} -- {{this.timeStarted}} to {{this.timeEnded}}</li>
+    {{/each}}
+  {{else}}
+    <li>No assignments yet. <a href="/sites">Browse sites to sign up!</a></li>
+  {{/if}}
 </ul>

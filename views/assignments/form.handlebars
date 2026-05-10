@@ -1,0 +1,23 @@
+  <form action="/assignments/upsert" role="form" method="post">
+    <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+    <input type="hidden" name="volunteerId" value="{{currentUser.volunteerId}}">
+    <div>
+    <label for="siteId">Site</label>
+    <select name="siteId" id="siteId">
+        <option disabled value selected>-- select site --</option>
+        {{#each sites}}
+        <option value="{{this.id}}" {{#if (eq this.id @root.selectedSiteId)}}selected{{/if}}>{{this.siteName}}</option>
+        {{/each}}
+    </select>
+    </div>
+      <div>
+    <label for="roleId">Role</label>
+    <select name="roleId" id="roleId">
+      <option disabled value selected>-- select role --</option>
+      {{#each roles}}
+        <option value="{{this.id}}">{{this.roleName}}</option>
+      {{/each}}
+    </select>
+  </div>
+  <button type="submit">Submit</button>
+</form>

@@ -6,32 +6,37 @@ exports.all = async () => {
 };
 
 exports.add = async (volunteer) => {
- await db.getPool().query("insert into volunteers (first_name, last_name) values ($1, $2);",
-   [volunteer.firstName, volunteer.lastName]);
+  const { rows } = await db.getPool().query(
+    "INSERT INTO volunteers (first_name, last_name, volunteer_status) VALUES ($1, $2, $3) RETURNING *;",
+    [volunteer.firstName, volunteer.lastName, true]
+  );
+  return db.camelize(rows)[0]; // ✅ return the new volunteer with its id
 };
 
 exports.get = async (id) => {
  const { rows } = await db.getPool().query("select * from volunteers where id = $1", [id])
+ console.log('raw volunteer:', rows[0]); // ✅ add this
  return db.camelize(rows)[0]
 };
 
-exports.upsert = (volunteer) => {
+exports.upsert = async (volunteer) => {
   if (volunteer.id) {
     exports.update(volunteer);
   } else {
-    exports.add(volunteer);
+    await exports.add(volunteer);
   }
 };
 
 exports.update = async (volunteer) => {
- await db.getPool().query("update volunteers set first_name = $1, last_name = $2 where id = $3;",
-   [volunteer.firstName, volunteer.lastName, volunteer.id]);
+ await db.getPool().query("update volunteers set first_name = $1, last_name = $2, volunteer_status = $3 where id = $4;",
+   [volunteer.firstName, volunteer.lastName, volunteer.volunteerStatus === "true", volunteer.id]);
 };
 
 exports.allForSite = async (site) => {
   const { rows } = await db.getPool().query(`
-    select volunteers.* from volunteers
-    JOIN volunteers_sites on volunteers_sites.volunteer_id = volunteers.id
-    where volunteers_sites.site_id = $1;`, [site.id]);
+    select volunteers.*, roles.role_name from volunteers
+    JOIN assignments on assignments.volunteer_id = volunteers.id
+    JOIN roles on roles.id = assignments.role_id
+    where assignments.site_id = $1;`, [site.id]);
   return db.camelize(rows);
 };

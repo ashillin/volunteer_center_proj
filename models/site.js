@@ -18,24 +18,26 @@ exports.get = async (id) => {
  return db.camelize(rows)[0]
 };
 
-exports.upsert = (site) => {
+exports.upsert = async (site) => {
+  if (!site.volunteerIds) {
+  site.volunteerIds = [];  // ✅ default to empty array if none selected
+  }
   if (site.volunteerIds && ! Array.isArray(site.volunteerIds)) {
     site.volunteerIds = [site.volunteerIds];
   }
   if (site.id) {
-    exports.update(site);
+    await exports.update(site);
   } else {
-    exports.add(site);
+    await exports.add(site);
   }
 };
 
 exports.update = async (site) => {
  const { rows } = await db.getPool().query("update sites set site_name = $1, location = $2, created_at = $3, hours_op = $4 where id = $5;",
    [site.siteName, site.location, site.createdAt, site.hoursOp, site.id]);
-     let newSite = db.camelize(rows)[0]
-  await DeleteVolunteersForSite(newSite) // By first deleting the relevant volunteers_sites records, we prevent accidental duplicates
-  await addVolunteersToSite(newSite, site.volunteerIds)
-  return newSite
+  await DeleteVolunteersForSite(site) // By first deleting the relevant volunteers_sites records, we prevent accidental duplicates
+  await addVolunteersToSite(site, site.volunteerIds)
+  return site
 }
 const addVolunteersToSite = async (site, volunteerIds) => {
   volunteerIds.forEach(async (volunteerId) => {

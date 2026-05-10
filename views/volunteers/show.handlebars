@@ -1,0 +1,7 @@
+{{#if volunteer}}
+    <div>
+      <h2>{{volunteer.firstName}} {{volunteer.lastName}}</h2>
+      <input type="hidden" name="id" value="{{volunteer.id}}">
+    </div>
+{{/if}}
+<p>Status: {{#if volunteer.volunteerStatus}}Active{{else}}Inactive{{/if}}</p>

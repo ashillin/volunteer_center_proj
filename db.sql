@@ -8,7 +8,7 @@ CREATE TABLE "sites" (
   "id" serial,
   "site_name" text,
   "location" text,
-  "created_at" timestamp,
+  "created_at" text,
   "hours_op" text,
   "site_status" boolean,
   PRIMARY KEY ("id")
@@ -17,7 +17,8 @@ CREATE TABLE "sites" (
 CREATE TABLE "users" (
   "id" serial,
   "volunteer_id" int,
-  "name" text,
+  "first_name" text,
+  "last_name" text,
   "email" text,
   "password" text,
   "salt" text,
@@ -29,6 +30,7 @@ CREATE TABLE "volunteers" (
   "user_id" int,
   "first_name" text,
   "last_name" text,
+  "volunteer_status" boolean,
   PRIMARY KEY ("id")
 );
 

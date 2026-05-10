@@ -12,9 +12,9 @@ const encryptPassword = (password, salt) => {
 exports.add = async (user) => {
   let salt = createSalt();
   let encryptedPassword = encryptPassword(user.password, salt)
-  return db.getPool()
-    .query("INSERT INTO users(email, name, salt, password) VALUES($1, $2, $3, $4) RETURNING *",
-      [user.email, user.name, salt, encryptedPassword])
+  const { rows } = await db.getPool().query("INSERT INTO users(email, first_name, last_name, salt, password) VALUES($1, $2, $3, $4, $5) RETURNING *",
+      [user.email, user.firstName, user.lastName, salt, encryptedPassword]);
+      return db.camelize(rows)[0]
 };
 
 // exports.add = (user) => {
@@ -39,13 +39,13 @@ exports.login = async (login) => {
 };
 
 
-exports.login = (login) => {
-  let user = exports.getByEmail(login.email);
-  if (user && user.password === login.password) {
-    return user;
-  }
-  return null;
-};
+// exports.login = (login) => {
+//   let user = exports.getByEmail(login.email);
+//   if (user && user.password === login.password) {
+//     return user;
+//   }
+//   return null;
+// };
 
 // exports.get = (idx) => {
 //   return users[idx];

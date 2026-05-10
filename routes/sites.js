@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Site = require('../models/site');
 const Volunteer = require('../models/volunteer');
-const Assignment = require('../models/assignment')
+const Assignment = require('../models/assignment');
+const Role = require('../models/role');
 
 router.get('/', async (req, res, next) =>{
     const sites = await Site.all();
@@ -41,7 +42,7 @@ router.post('/upsert', async (req, res, next) => {
 
 router.get('/edit', async (req, res, next) => {
   let siteId = req.query.id;
-  let site = Site.get(siteId);
+  let site = await Site.get(siteId);
   site.volunteerIds = (await Volunteer.allForSite(site)).map(volunteer => volunteer.id);
   res.render('sites/form', { 
     title: 'VolunteerCenter || Sites', 
@@ -56,14 +57,17 @@ router.get('/show/:id', async (req, res, next) => {
     site: await Site.get(req.params.id),
     volunteers: [],
     siteId: req.params.id,
-    titles: Assignment.titles
+    roles: await Role.all()
   };
   templateVars.site.volunteers = await Volunteer.allForSite(templateVars.site);
-  if (templateVars.site.roleId) {
-    templateVars['role'] = await Role.get(templateVars.site.roleId);
-  }
+  console.log('volunteers at site:', templateVars.site.volunteers);
+  // if (templateVars.site.roleId) {
+  //   templateVars['role'] = await Role.get(templateVars.site.roleId);
+  // }
   if (req.session.currentUser) {
-    templateVars['assignment'] = await Assignment.get(req.params.id, req.session.currentUser.email);
+    templateVars['assignment'] = await Assignment.get(
+      req.session.currentUser.volunteerId,
+      req.params.id);
   }
   res.render('sites/show', templateVars);
 });

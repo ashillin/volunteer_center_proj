@@ -15,5 +15,12 @@
     <label for="last_name">Last Name</label>
     <input type="text" id="last_name" name="lastName" {{#if volunteer}}value="{{volunteer.lastName}}"{{/if}}>
   </div>
+  <div>
+  <label for="volunteerStatus">Status</label>
+  <select name="volunteerStatus" id="volunteerStatus">
+    <option value="true" {{#if volunteer}}{{#if volunteer.volunteerStatus}}selected{{/if}}{{/if}}>Active</option>
+    <option value="false" {{#if volunteer}}{{#unless volunteer.volunteerStatus}}selected{{/unless}}{{/if}}>Inactive</option>
+  </select>
+</div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>

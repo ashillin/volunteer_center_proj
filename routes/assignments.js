@@ -1,6 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const Assignment = require('../models/assignment');
+const Site = require('../models/site');
+const Role = require('../models/role');
+
+router.get('/form', async (req, res, next) => {
+    if (!req.session.currentUser) {
+    res.redirect(303, '/users/login');
+    return;
+  }
+  res.render('assignments/form', {
+    title: 'VolunteerCenter || Register',
+    sites: await Site.all(),
+    roles: await Role.all(),
+    selectedSiteId: req.query.siteId  // pre-selects the site they came from
+  });
+});
 
 router.post('/upsert', async (req, res, next) => {
   console.log('body: ' + JSON.stringify(req.body))

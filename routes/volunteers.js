@@ -46,11 +46,14 @@ router.get('/edit', async (req, res, next) => {
   res.render('volunteers/form', templateVars);
 });
 
-// router.get('/edit', async (req, res, next) => {
-//   let volunteerIdx = req.query.id;
-//   let volunteer = Volunteer.get(volunteerIdx);
-//   res.render('volunteers/form', { title: 'VolunteerCenter || Volunteers', volunteer: volunteer, volunteerIdx: volunteerIdx  });
-// });
+router.get('/show/:id', async (req, res, next) => {
+  let volunteer = await Volunteer.get(req.params.id);
+  let templateVars = {
+    title: 'VolunteerCenter || Volunteer',
+    volunteer: volunteer,
+  };
+  res.render('volunteers/show', templateVars);
+});
 
 
 module.exports = router;
