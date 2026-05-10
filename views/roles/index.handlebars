@@ -2,7 +2,7 @@
 <a href="/roles/form">Add a new Role</a>
 <ul>
  {{#each roles}}
-   <li><a href="/roles/show/{{@index}}">{{@index}} - {{this.title}}</a>
-    <a href="/roles/edit?id={{@index}}">Edit</a></li>
+   <li><a href="/roles/show/{{this.id}}">{{this.id}} - {{this.roleName}}</a>
+    <a href="/roles/edit?id={{this.id}}">Edit</a></li>
  {{/each}}
 </ul>

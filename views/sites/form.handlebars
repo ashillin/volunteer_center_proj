@@ -3,8 +3,8 @@
   <div><h1>Add a new Site</h1></div>
   {{#if site}}
     <div>
-      <h2>{{site.siteName}} {{site.siteAddy}}</h2>
-      <input type="hidden" name="id" value="{{siteId}}">
+      <h2>{{site.siteName}} {{site.location}}</h2>
+      <input type="hidden" name="id" value="{{site.id}}">
     </div>
   {{/if}}
   <div>
@@ -13,23 +13,25 @@
   </div>
   <div>
     <label for="site_addy">Address</label>
-    <input type="text" id="site_addy" name="siteAddy" {{#if site}}value="{{site.siteAddy}}"{{/if}}>
+    <input type="text" id="site_addy" name="siteAddy" {{#if site}}value="{{site.location}}"{{/if}}>
   </div>
-    <div>
+  <div>
     <label for="creat_date">Date Created</label>
-    <input type="text" id="create_date" name="createDate" {{#if site}}value="{{site.createDate}}"{{/if}}>
+    <input type="text" id="create_date" name="createDate" {{#if site}}value="{{site.createdAt}}"{{/if}}>
   </div>
+  <div>
+    <label for="hours_op">Hours of Operation</label>
+    <input type="text" id="hours_op" name="hoursOp" {{#if site}}value="{{site.hoursOp}}"{{/if}}>
   <div class="mb-3">
     <label for="volunteerIds">Volunteers</label>
     <select name="volunteerIds" multiple id="volunteerIds">
       <option disabled selected value>-- select Volunteers --</option>
       {{#each volunteers}}
-        <option value="{{@index}}" {{#if (and @root.site (in @root.site.volunteerIds @index))}}selected{{/if}}>
+        <option value="{{this.id}}" {{#if (and @root.site (in @root.site.volunteerIds this.id))}}selected{{/if}}>
           {{this.firstName}} {{this.lastName}}
         </option>
       {{/each}}
     </select>
   </div>
-
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>

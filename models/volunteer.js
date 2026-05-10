@@ -1,15 +1,18 @@
-const volunteers = [
-    {firstName: "James", lastName: "S. A. Corey"},
-    {firstName: "Craig", lastName: "Alanson"}, 
-    {firstName: "Cixin", lastName: "Liu"},
-  ];
+const db = require('../database')
 
-exports.add = (volunteer) => {
-    volunteers.push(volunteer);
+exports.all = async () => {
+ const { rows } = await db.getPool().query("select * from volunteers order by id");
+ return db.camelize(rows);
 };
 
-exports.get = (idx) => {
-  return volunteers[idx];
+exports.add = async (volunteer) => {
+ await db.getPool().query("insert into volunteers (first_name, last_name) values ($1, $2);",
+   [volunteer.firstName, volunteer.lastName]);
+};
+
+exports.get = async (id) => {
+ const { rows } = await db.getPool().query("select * from volunteers where id = $1", [id])
+ return db.camelize(rows)[0]
 };
 
 exports.upsert = (volunteer) => {
@@ -20,9 +23,15 @@ exports.upsert = (volunteer) => {
   }
 };
 
-exports.update = (volunteer) => {
-  volunteer.id = parseInt(volunteer.id);
-  volunteers[volunteer.id] = volunteer;
+exports.update = async (volunteer) => {
+ await db.getPool().query("update volunteers set first_name = $1, last_name = $2 where id = $3;",
+   [volunteer.firstName, volunteer.lastName, volunteer.id]);
 };
 
-  exports.all = volunteers;
+exports.allForSite = async (site) => {
+  const { rows } = await db.getPool().query(`
+    select volunteers.* from volunteers
+    JOIN volunteers_sites on volunteers_sites.volunteer_id = volunteers.id
+    where volunteers_sites.site_id = $1;`, [site.id]);
+  return db.camelize(rows);
+};

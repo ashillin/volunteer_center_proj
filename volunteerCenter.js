@@ -13,6 +13,7 @@ const volunteersRouter = require('./routes/volunteers');
 const sitesRouter = require('./routes/sites');
 const usersRouter = require('./routes/users');
 const rolesRouter = require('./routes/roles');
+const assignmentsRouter = require('./routes/assignments');
 
 //Framework Setup
 const app = express();
@@ -74,6 +75,7 @@ app.use('/volunteers', volunteersRouter);
 app.use('/sites', sitesRouter);
 app.use('/users', usersRouter);
 app.use('/roles', rolesRouter);
+app.use('/assignments', assignmentsRouter);
 
 
 // custom 404 page

@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+const Site = require('../models/site');
+const Assignment = require('../models/assignment');
+
 
 function IsLoggedIn(req, res) {
   if (req.session.currentUser) {
@@ -9,6 +12,16 @@ function IsLoggedIn(req, res) {
       intro: 'Error!',
       message: 'You are already logged in',
     };
+    res.redirect(303, '/');
+    return true;
+  }
+  return false;
+};
+
+function isNotLoggedIn(req, res) {
+  if (! req.session.currentUser) {
+    req.session.flash = {type: 'info',intro: 'Err!',
+      message: 'You are not logged in yet'};
     res.redirect(303, '/');
     return true;
   }
@@ -25,7 +38,7 @@ router.get('/register', async (req, res, next) => {
 
 router.post('/register', async (req, res, next) => {
   console.log('body: ' + JSON.stringify(req.body));
-  const user = User.getByEmail(req.body.email)
+  const user = await User.getByEmail(req.body.email)
   if (user) {
     res.render('users/register', {
       title: 'VolunteerCenter || Login',
@@ -35,7 +48,7 @@ router.post('/register', async (req, res, next) => {
         message: `A user with this email already exists`}
     });
   } else {
-    User.add(req.body);
+    await User.add(req.body);
     req.session.flash = {
       type: 'info',
       intro: 'Success!',
@@ -51,7 +64,7 @@ router.get('/login', async (req, res, next) => {
 });
 router.post('/login', async (req, res, next) => {
   console.log('body: ' + JSON.stringify(req.body));
-  const user = User.login(req.body)
+  const user = await User.login(req.body)
   if (user) {
     req.session.currentUser = user
     req.session.flash = {
@@ -62,7 +75,7 @@ router.post('/login', async (req, res, next) => {
     res.redirect(303, '/');
   } else {
     res.render('users/login', {
-      title: 'BookedIn || Login',
+      title: 'VolunteerCenter || Login',
       flash: {
         type: 'danger',
         intro: 'Error!',
@@ -79,6 +92,17 @@ router.post('/logout', async (req, res, next) => {
     message: 'You are now logged out',
   };
   res.redirect(303, '/');
+});
+
+router.get('/profile', async (req, res, next) => {
+  if (isNotLoggedIn(req, res)) {
+    return
+  }
+  const assignments = await Assignment.AllForUser(req.session.currentUser.email);
+  res.render('users/profile',
+    { title: 'VolunteerCenter || Profile',
+      user: req.session.currentUser,
+      assignments: assignments });
 });
 
 module.exports = router;

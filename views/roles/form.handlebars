@@ -3,12 +3,17 @@
   <div><h1>Add a new Role</h1></div>
 {{#if role}}
     <div>
-      <h2>{{role.title}}</h2>
-      <input type="hidden" name="id" value="{{roleId}}">
+      <h2>{{role.roleName}}</h2>
+      <input type="hidden" name="id" value="{{role.id}}">
     </div>
 {{/if}}
   <div>
-    <label for="title">First Name</label>
-    <input type="text" id="title" name="title" {{#if role}}value="{{role.title}}"{{/if}}>
+    <label for="role_name">Role Title</label>
+    <input type="text" id="role_name" name="roleName" {{#if role}}value="{{role.roleName}}"{{/if}}>
   </div>
+  <div>
+    <label for="description">Description</label>
+    <input type="text" id="description" name="description" {{#if role}}value="{{role.description}}"{{/if}}>
+  </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
 </form>

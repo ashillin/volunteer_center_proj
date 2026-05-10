@@ -1,15 +1,18 @@
-const roles = [
-    {title: "Chef", description: "Prepares food for the site."},
-    {title: "Tech person", description: "In charge of making sure technology at the site is working as intended."},
-    {title: "Greeter", description: "Greets people that walk up to the site and explains the site's purpose to them."}
-];
+const db = require('../database')
 
-exports.add = (role) => {
-    roles.push(role);
+exports.all = async () => {
+ const { rows } = await db.getPool().query("select * from roles order by id");
+ return db.camelize(rows);
 };
 
-exports.get = (idx) => {
-  return roles[idx];
+exports.add = async (role) => {
+ await db.getPool().query("insert into roles (role_name, description) values ($1, $2);",
+   [role.name, role.email]);
+};
+
+exports.get = async (id) => {
+ const { rows } = await db.getPool().query("select * from roles where id = $1", [id])
+ return db.camelize(rows)[0]
 };
 
 exports.upsert = (role) => {
@@ -20,9 +23,7 @@ exports.upsert = (role) => {
   }
 };
 
-exports.update = (role) => {
-  role.id = parseInt(role.id);
-  roles[role.id] = role;
+exports.update = async (role) => {
+ await db.getPool().query("update roles set role_name = $1, description = $2 where id = $3;",
+   [role.roleName, role.description, role.id]);
 };
-
-  exports.all = roles;
