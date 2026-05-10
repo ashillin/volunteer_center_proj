@@ -40,3 +40,11 @@ exports.allForSite = async (site) => {
     where assignments.site_id = $1;`, [site.id]);
   return db.camelize(rows);
 };
+
+exports.allForVolunteer = async (volunteer) => {
+  const { rows } = await db.getPool().query(`
+    select sites.* from sites
+    JOIN assignments on assignments.site_id = sites.id
+    where assignments.volunteer_id = $1;`, [volunteer.id]);
+  return db.camelize(rows);
+};

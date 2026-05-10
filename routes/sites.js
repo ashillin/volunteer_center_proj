@@ -4,6 +4,7 @@ const Site = require('../models/site');
 const Volunteer = require('../models/volunteer');
 const Assignment = require('../models/assignment');
 const Role = require('../models/role');
+const Notice = require('../models/notice');
 
 router.get('/', async (req, res, next) =>{
     const sites = await Site.all();
@@ -52,18 +53,17 @@ router.get('/edit', async (req, res, next) => {
 });
 
 router.get('/show/:id', async (req, res, next) => {
+  let site = await Site.get(req.params.id);
   let templateVars = {
     title: 'VolunteerCenter || Sites',
-    site: await Site.get(req.params.id),
+    site: site,
     volunteers: [],
     siteId: req.params.id,
-    roles: await Role.all()
+    roles: await Role.all(),
+    notices: await Notice.allForSite(site)
   };
   templateVars.site.volunteers = await Volunteer.allForSite(templateVars.site);
   console.log('volunteers at site:', templateVars.site.volunteers);
-  // if (templateVars.site.roleId) {
-  //   templateVars['role'] = await Role.get(templateVars.site.roleId);
-  // }
   if (req.session.currentUser) {
     templateVars['assignment'] = await Assignment.get(
       req.session.currentUser.volunteerId,

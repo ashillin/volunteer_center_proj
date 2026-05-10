@@ -51,6 +51,8 @@ router.get('/show/:id', async (req, res, next) => {
   let templateVars = {
     title: 'VolunteerCenter || Volunteer',
     volunteer: volunteer,
+    sites: await Volunteer.allForVolunteer(volunteer),
+    isCurrentVolunteer: req.session.currentUser && req.session.currentUser.volunteerId == req.params.id
   };
   res.render('volunteers/show', templateVars);
 });

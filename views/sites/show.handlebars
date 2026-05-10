@@ -19,3 +19,29 @@
     <button>Register to work at this Site!</button>
   </a>
 {{/if}}
+<div>
+  <h2>Notices</h2>
+  <div>
+    {{#if currentUser}}
+      <form action="/notices/upsert" role="form" method="post">
+        <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+        <input type="hidden" name="siteId" value="{{siteId}}">
+        <input type="hidden" name="userId" value="{{currentUser.id}}">
+        <div>
+          <textarea rows="5" id="notice" name="notice">{{notice.notice}}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">New notice</button>
+      </form>
+    {{/if}}
+    {{#each notices}}
+      <div>
+        <p>
+          {{this.notice}}<br>
+          By {{this.userEmail}}
+          {{#if (eq @root.currentUser.id this.userId) }}
+          <br><a href="/notices/edit?id={{this.id}}">Edit</a>
+          {{/if}}
+      </div>
+    {{/each}}
+  </div>
+</div>

@@ -14,6 +14,7 @@ const sitesRouter = require('./routes/sites');
 const usersRouter = require('./routes/users');
 const rolesRouter = require('./routes/roles');
 const assignmentsRouter = require('./routes/assignments');
+const noticesRouter = require('./routes/notices');
 
 //Framework Setup
 const app = express();
@@ -76,6 +77,7 @@ app.use('/sites', sitesRouter);
 app.use('/users', usersRouter);
 app.use('/roles', rolesRouter);
 app.use('/assignments', assignmentsRouter);
+app.use('/notices', noticesRouter);
 
 
 // custom 404 page

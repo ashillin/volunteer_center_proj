@@ -1,0 +1,12 @@
+<h1>Notice</h1>
+
+<form action="/notices/upsert" role="form" method="post">
+  <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+  <input type="hidden" name="id" value="{{notice.id}}">
+  <input type="hidden" name="siteId" value="{{#if notice}}{{notice.siteId}}{{else}}{{siteId}}{{/if}}">
+  <input type="hidden" name="volunteerId" value="{{currentUser.volunteerId}}">
+  <div>
+    <textarea rows="5" id="notice" name="notice">{{notice.notice}}</textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

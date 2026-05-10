@@ -5,3 +5,17 @@
     </div>
 {{/if}}
 <p>Status: {{#if volunteer.volunteerStatus}}Active{{else}}Inactive{{/if}}</p>
+{{#if sites}}
+<h3>Sites:</h3>
+<ul>
+  {{#each sites}}
+    <li><a href="/sites/show/{{this.id}}">{{this.siteName}}</a></li>
+  {{/each}}
+</ul>
+{{else}}
+<p>Not working at any sites yet.</p>
+{{/if}}
+
+{{#if isCurrentVolunteer}}
+  <a href="/volunteers/edit?id={{volunteer.id}}">Edit Profile</a>
+{{/if}}
