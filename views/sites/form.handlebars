@@ -16,14 +16,19 @@
     <input type="text" id="location" name="location" {{#if site}}value="{{site.location}}"{{/if}}>
   </div>
   <div>
-    <label for="creat_date">Date Created</label>
-    <input type="text" id="create_date" name="createDate" {{#if site}}value="{{site.createdAt}}"{{/if}}>
-  </div>
-  <div>
     <label for="hours_op">Hours of Operation</label>
     <input type="text" id="hours_op" name="hoursOp" {{#if site}}value="{{site.hoursOp}}"{{/if}}>
   </div>
-  <div class="mb-3">
+  <div>
+  <label for="roleId">Your Role</label>
+  <select name="roleId" id="roleId">
+    <option disabled value selected>-- select your role --</option>
+    {{#each roles}}
+      <option value="{{this.id}}" {{#if (eq this.id @root.site.roleId)}}selected{{/if}}>{{this.roleName}}</option>
+    {{/each}}
+  </select>
+</div>
+  {{!-- <div class="mb-3">
     <label for="volunteerIds">Volunteers</label>
     <select name="volunteerIds" multiple id="volunteerIds">
       <option disabled selected value>-- select Volunteers --</option>
@@ -33,6 +38,6 @@
         </option>
       {{/each}}
     </select>
-  </div>
+  </div> --}}
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>

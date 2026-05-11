@@ -7,9 +7,7 @@ exports.add = async (assignment) => {
 };
 
 exports.get = async (volunteerId, siteId, roleId) => {
-  console.log('Assignment.get called with:', volunteerId, siteId);
   const { rows } = await db.getPool().query(`select * from assignments where volunteer_id = $1 and site_id = $2`, [volunteerId, siteId])
-  console.log('Assignment.get rows:', rows);
   return db.camelize(rows)[0]
 };
 

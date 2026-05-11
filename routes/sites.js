@@ -12,15 +12,31 @@ router.get('/', async (req, res, next) =>{
 });
 
 router.get('/form', async (req, res, next) => {
-  const site = await Site.all();
+  if (!req.session.currentUser) {
+    res.redirect(303, '/users/login');
+    return;
+  }
   res.render('sites/form', { 
     title: 'VolunteerCenter || Sites', 
     site: await Site.all(), 
-    volunteers: await Volunteer.all()});
+    volunteers: await Volunteer.all(),
+    roles: await Role.all()  // ✅ add this
+  });
 });
+//   const site = await Site.all();
+//   res.render('sites/form', { 
+//     title: 'VolunteerCenter || Sites', 
+//     site: await Site.all(), 
+//     volunteers: await Volunteer.all()});
+// });
 
 router.post('/upsert', async (req, res, next) => {
-  console.log('body: ' + JSON.stringify(req.body))
+    if (!req.session.currentUser) {
+    res.redirect(303, '/users/login');
+    return;
+  }
+  req.body.volunteerId = req.session.currentUser.volunteerId;
+  console.log('body: ' + JSON.stringify(req.body));
   await Site.upsert(req.body);
   let createdOrupdated = req.body.id ? 'updated' : 'created';
   req.session.flash = {
@@ -42,14 +58,29 @@ router.post('/upsert', async (req, res, next) => {
 
 
 router.get('/edit', async (req, res, next) => {
+    if (!req.session.currentUser) {
+    res.redirect(303, '/users/login');
+    return;
+  }
   let siteId = req.query.id;
   let site = await Site.get(siteId);
+  if (site.volunteerId != req.session.currentUser.volunteerId) {
+    req.session.flash = {
+      type: 'danger',
+      intro: 'Error!',
+      message: 'You are not authorized to edit this site!',
+    };
+    res.rediirect(303, 'sites/show/${siteId}');
+    return;
+  }
   site.volunteerIds = (await Volunteer.allForSite(site)).map(volunteer => volunteer.id);
   res.render('sites/form', { 
     title: 'VolunteerCenter || Sites', 
     site: site, 
     siteId: siteId, 
-    volunteers: await Volunteer.all() });
+    volunteers: await Volunteer.all(),
+    roles: await Role.all()  // ✅ add this 
+  });
 });
 
 router.get('/show/:id', async (req, res, next) => {
@@ -63,7 +94,6 @@ router.get('/show/:id', async (req, res, next) => {
     notices: await Notice.allForSite(site)
   };
   templateVars.site.volunteers = await Volunteer.allForSite(templateVars.site);
-  console.log('volunteers at site:', templateVars.site.volunteers);
   if (req.session.currentUser) {
     templateVars['assignment'] = await Assignment.get(
       req.session.currentUser.volunteerId,

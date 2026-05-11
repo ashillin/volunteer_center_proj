@@ -1,5 +1,7 @@
 <h1>{{title}}</h1>
-<a href="/sites/form">Add a new Site</a>
+{{#if currentUser}}
+  <a href="/sites/form">Add a new Site</a>
+{{/if}}
 <ul>
  {{#each sites}}
    <li><a href="/sites/show/{{this.id}}">{{this.id}} - {{this.siteName}} {{this.location}}</a> 

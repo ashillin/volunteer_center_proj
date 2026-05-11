@@ -1,9 +1,13 @@
-<h1>{{site.siteName}}</h1>
+<h1>{{#if currentUser}} {{#if (eq currentUser.volunteerId site.volunteerId)}}<a href="/sites/edit?id={{siteId}}">{{site.siteName}}</a>{{/if}}
+{{else}}
+{{site.siteName}}
+{{/if}}</h1>
+<p>Status: {{#if site.siteStatus}}Active{{else}}Inactive{{/if}}</p>
 {{#if site.volunteers}}
 <p>Volunteers: {{#each site.volunteers}}{{this.firstName}} {{this.lastName}} -- {{this.roleName}} {{#unless @last}}, {{/unless}}{{/each}}</p>
 {{/if}}
 <p>
-  Originally created on {{site.createdAt}} and open from {{site.hoursOp}}
+  Originally created on {{dateStr site.createdAt}} and open from {{site.hoursOp}}
 </p>
 
 {{#if currentUser}}
@@ -26,7 +30,7 @@
       <form action="/notices/upsert" role="form" method="post">
         <input type="hidden" name="_csrf" value="{{_csrfToken}}">
         <input type="hidden" name="siteId" value="{{siteId}}">
-        <input type="hidden" name="userId" value="{{currentUser.id}}">
+        <input type="hidden" name="volunteerId" value="{{currentUser.volunteerId}}">
         <div>
           <textarea rows="5" id="notice" name="notice">{{notice.notice}}</textarea>
         </div>
@@ -38,7 +42,7 @@
         <p>
           {{this.notice}}<br>
           By {{this.userEmail}}
-          {{#if (eq @root.currentUser.id this.userId) }}
+          {{#if (eq @root.currentUser.volunteerId this.volunteerId) }}
           <br><a href="/notices/edit?id={{this.id}}">Edit</a>
           {{/if}}
       </div>

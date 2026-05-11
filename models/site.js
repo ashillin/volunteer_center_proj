@@ -6,10 +6,14 @@ exports.all = async () => {
 }
 
 exports.add = async (site) => {
- const { rows } = await db.getPool().query("insert into sites (site_name, location, created_at, hours_op) values ($1, $2, $3, $4) RETURNING *;",
-   [site.siteName, site.location, site.createdAt, site.hoursOp]);
+ const { rows } = await db.getPool().query("insert into sites (site_name, location, hours_op, site_status, volunteer_id) values ($1, $2, $3, $4, $5) RETURNING *;",
+   [site.siteName, site.location, site.hoursOp, true, site.volunteerId]);
      let newSite = db.camelize(rows)[0]
-  await addVolunteersToSite(newSite, site.volunteerIds)
+  await addVolunteersToSite(newSite, site.volunteerIds);
+  await db.getPool().query(
+  "INSERT INTO assignments (volunteer_id, site_id, role_id) VALUES ($1, $2, $3);",
+  [site.volunteerId, newSite.id, site.roleId]
+  );
   return newSite
 };
 
@@ -33,8 +37,8 @@ exports.upsert = async (site) => {
 };
 
 exports.update = async (site) => {
- const { rows } = await db.getPool().query("update sites set site_name = $1, location = $2, created_at = $3, hours_op = $4 where id = $5;",
-   [site.siteName, site.location, site.createdAt, site.hoursOp, site.id]);
+ const { rows } = await db.getPool().query("update sites set site_name = $1, location = $2, created_at = $3, hours_op = $4, site_status = $5 where id = $6;",
+   [site.siteName, site.location, site.createdAt, site.hoursOp, site.siteStatus === "true", site.id]);
   await DeleteVolunteersForSite(site) // By first deleting the relevant volunteers_sites records, we prevent accidental duplicates
   await addVolunteersToSite(site, site.volunteerIds)
   return site

@@ -83,7 +83,6 @@ router.get('/login', async (req, res, next) => {
 router.post('/login', async (req, res, next) => {
   console.log('body: ' + JSON.stringify(req.body));
   const user = await User.login(req.body)
-  console.log('logged in user:', user); // ✅ add this
   if (user) {
     req.session.currentUser = user
     req.session.flash = {

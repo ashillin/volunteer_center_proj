@@ -15,7 +15,6 @@ exports.add = async (volunteer) => {
 
 exports.get = async (id) => {
  const { rows } = await db.getPool().query("select * from volunteers where id = $1", [id])
- console.log('raw volunteer:', rows[0]); // ✅ add this
  return db.camelize(rows)[0]
 };
 

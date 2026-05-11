@@ -6,9 +6,10 @@ create database vc_db;
 
 CREATE TABLE "sites" (
   "id" serial,
+  "volunteer_id" int,
   "site_name" text,
   "location" text,
-  "created_at" text,
+  "created_at" timestamp DEFAULT CURRENT_TIMESTAMP,
   "hours_op" text,
   "site_status" boolean,
   PRIMARY KEY ("id")
