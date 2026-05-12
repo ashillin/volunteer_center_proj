@@ -7,7 +7,7 @@ exports.all = async () => {
 
 exports.add = async (role) => {
  await db.getPool().query("insert into roles (role_name, description) values ($1, $2);",
-   [role.name, role.email]);
+   [role.roleName, role.description]);
 };
 
 exports.get = async (id) => {
@@ -17,7 +17,7 @@ exports.get = async (id) => {
 
 exports.upsert = async (role) => {
   if (role.id) {
-    exports.update(role);
+    await exports.update(role);
   } else {
     await exports.add(role);
   }

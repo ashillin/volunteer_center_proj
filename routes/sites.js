@@ -23,12 +23,7 @@ router.get('/form', async (req, res, next) => {
     roles: await Role.all()  // ✅ add this
   });
 });
-//   const site = await Site.all();
-//   res.render('sites/form', { 
-//     title: 'VolunteerCenter || Sites', 
-//     site: await Site.all(), 
-//     volunteers: await Volunteer.all()});
-// });
+
 
 router.post('/upsert', async (req, res, next) => {
     if (!req.session.currentUser) {
@@ -46,15 +41,6 @@ router.post('/upsert', async (req, res, next) => {
   };
   res.redirect(303, '/sites')
 });
-
-// router.get('/edit', async (req, res, next) => {
-//   let templateVars = await { title: 'VolunteerCenter || Sites', volunteers: await Volunteer.all() }
-//   if (req.query.id) {
-//     let site = await Site.get(req.query.id)
-//     if (site) {templateVars['site'] = site}
-//   }
-//   res.render('sites/form', templateVars);
-// });
 
 
 router.get('/edit', async (req, res, next) => {
@@ -88,7 +74,7 @@ router.get('/show/:id', async (req, res, next) => {
   let templateVars = {
     title: 'VolunteerCenter || Sites',
     site: site,
-    volunteers: [],
+    volunteers: await Volunteer.allForSite(site),
     siteId: req.params.id,
     roles: await Role.all(),
     notices: await Notice.allForSite(site)

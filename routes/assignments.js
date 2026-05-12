@@ -20,8 +20,9 @@ router.get('/form', async (req, res, next) => {
 router.post('/upsert', async (req, res, next) => {
   console.log('body: ' + JSON.stringify(req.body))
   let siteId = req.body.siteId;
+  req.body.volunteerId = req.session.currentUser.volunteerId;
   let redirect = `/sites/show/${siteId}`;
-  Assignment.upsert(req.body);
+  await Assignment.upsert(req.body);
   req.session.flash = {
     type: 'info',
     intro: 'Success!',

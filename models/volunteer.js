@@ -33,7 +33,7 @@ exports.update = async (volunteer) => {
 
 exports.allForSite = async (site) => {
   const { rows } = await db.getPool().query(`
-    select volunteers.*, roles.role_name from volunteers
+    select volunteers.*, roles.id as role_id, roles.role_name from volunteers
     JOIN assignments on assignments.volunteer_id = volunteers.id
     JOIN roles on roles.id = assignments.role_id
     where assignments.site_id = $1;`, [site.id]);

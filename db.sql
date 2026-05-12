@@ -46,7 +46,7 @@ CREATE TABLE "notices" (
   "site_id" int,
   "volunteer_id" int,
   "notice" text,
-  "created_at" timestamp,
+  "created_at" timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY ("id")
 );
 
@@ -62,7 +62,7 @@ CREATE TABLE "assignments" (
   "volunteer_id" int,
   "site_id" int,
   "role_id" int,
-  "time_started" timestamp,
+  "time_started" timestamp DEFAULT CURRENT_TIMESTAMP,
   "time_ended" timestamp,
   PRIMARY KEY ("id")
 );

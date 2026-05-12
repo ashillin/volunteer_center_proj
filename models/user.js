@@ -17,9 +17,7 @@ exports.add = async (user) => {
       return db.camelize(rows)[0]
 };
 
-// exports.add = (user) => {
-//     users.push(user);
-// };
+
 exports.getByEmail = async (email) => {
   const { rows } = await db.getPool().query("select * from users where email = $1", [email])
   return db.camelize(rows)[0]
@@ -38,30 +36,3 @@ exports.login = async (login) => {
   return null;
 };
 
-
-// exports.login = (login) => {
-//   let user = exports.getByEmail(login.email);
-//   if (user && user.password === login.password) {
-//     return user;
-//   }
-//   return null;
-// };
-
-// exports.get = (idx) => {
-//   return users[idx];
-// };
-
-// exports.upsert = (user) => {
-//   if (user.id) {
-//     exports.update(user);
-//   } else {
-//     exports.add(user);
-//   }
-// };
-
-// exports.update = (user) => {
-//   user.id = parseInt(user.id);
-//   users[user.id] = user;
-// };
-
-  // exports.all = users;

@@ -22,15 +22,19 @@ exports.AllForUser = async (user) => {
     return db.camelize(rows)
 };
 
-exports.update = async (bookUser) => {
-    await db.getPool().query("update books_users set read_status = $1 where id = $2;",
-        [bookUser.readStatus, bookUser.id]);
+exports.update = async (assignment) => {
+    await db.getPool().query("update asignments set volunteer_id = $1 and site_id = $2 and role_id = $3 where id = $4;",
+        [assignment.volunteerId, assignment.siteId, assignment.roleId, assignment.id]);
 };
 
-exports.upsert = (bookUser) => {
-  if (bookUser.id) {
-    exports.update(bookUser);
+exports.upsert = async (assignment) => {
+  const existing = await exports.get(assignment.volunteerId, assignment.siteId);
+  if (existing) {
+    await db.getPool().query(
+      "UPDATE assignments SET role_id = $1 WHERE volunteer_id = $2 AND site_id = $3;",
+      [assignment.roleId, assignment.volunteerId, assignment.siteId]
+    );
   } else {
-    exports.add(bookUser);
+    await exports.add(assignment);
   }
 };

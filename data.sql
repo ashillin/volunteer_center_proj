@@ -11,9 +11,9 @@ insert into users (first_name, last_name, email, salt, password, volunteer_id) v
 insert into users (first_name, last_name, email, salt, password, volunteer_id) values('Akutami', 'Gege', 'akutami@test.com', '67c9ec3b8cfbe976456acca100d62ee0', '59fadba0279346c9a4a2031ee3def313e1e9961933a0a6b19ed522b7dd2154ae', 3);
 
 -- sites
-insert into sites (site_name, location, hours_op, site_status, volunteer_id) values('Valentine Ave', '2544 Valentine Ave', '9am-5pm', true, 1);
-insert into sites (site_name, location, hours_op, site_status, volunteer_id) values('University Heights', '149th street 3rd Ave', '10am-4pm', true, 2);
-insert into sites (site_name, location, hours_op, site_status, volunteer_id) values('Fordham University', 'Fordham Road', '10am-2pm', true, 3);
+insert into sites (site_name, location, hours_op, site_status, volunteer_id, created_at) values('Valentine Ave', '2544 Valentine Ave', '9am-5pm', true, 1, '2005-09-21');
+insert into sites (site_name, location, hours_op, site_status, volunteer_id, created_at) values('University Heights', '149th street 3rd Ave', '10am-4pm', true, 2, '2013-08-21');
+insert into sites (site_name, location, hours_op, site_status, volunteer_id, created_at) values('Fordham University', 'Fordham Road', '10am-2pm', true, 3, '2026-05-21');
 
 -- roles
 insert into roles (role_name, description) values('Chef', 'Prepares food for the site.');
@@ -24,3 +24,8 @@ insert into roles (role_name, description) values('Greeter', 'Greets people that
 insert into assignments (volunteer_id, site_id, role_id, time_started) values(1, 1, 1, '2005-09-21');
 insert into assignments (volunteer_id, site_id, role_id, time_started) values(2, 2, 2, '2013-08-21');
 insert into assignments (volunteer_id, site_id, role_id, time_started) values(3, 3, 3, '2026-05-21');
+
+-- notices
+insert into notices (site_id, volunteer_id, notice) values(1, 1, 'Bodega nearby if anyone needs to grab a snack or food');
+insert into notices (site_id, volunteer_id, notice) values(2, 2, 'Volunteers from local high school come by to help on Weekends');
+insert into notices (site_id, volunteer_id, notice) values(3, 3, 'Try to avoid interacting with campus security they can be hostile towards us');

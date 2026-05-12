@@ -25,17 +25,6 @@ router.post('/upsert', async (req, res, next) => {
  res.redirect(303, '/volunteers')
 });
 
-// router.post('/upsert', async (req, res, next) => {
-//   console.log('body: ' + JSON.stringify(req.body))
-//   Volunteer.upsert(req.body);
-//   let createdOrupdated = req.body.id ? 'updated' : 'created';
-//   req.session.flash = {
-//     type: 'info',
-//     intro: 'Success!',
-//     message: `the volunteer has been ${createdOrupdated}!`,
-//   };
-//   res.redirect(303, "/volunteers")
-// });
 
 router.get('/edit', async (req, res, next) => {
   let templateVars = { title: 'VolunteerCenter || Volunteers' }

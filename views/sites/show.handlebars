@@ -4,7 +4,9 @@
 {{/if}}</h1>
 <p>Status: {{#if site.siteStatus}}Active{{else}}Inactive{{/if}}</p>
 {{#if site.volunteers}}
-<p>Volunteers: {{#each site.volunteers}}{{this.firstName}} {{this.lastName}} -- {{this.roleName}} {{#unless @last}}, {{/unless}}{{/each}}</p>
+<p>Volunteers: <ul>
+{{#each site.volunteers}}<li><a href="/volunteers/show/{{this.id}}">{{this.firstName}} {{this.lastName}}</a> - <a href="/roles/show/{{this.roleId}}">{{this.roleName}}</a> </li>{{/each}}</p>
+</ul>
 {{/if}}
 <p>
   Originally created on {{dateStr site.createdAt}} and open from {{site.hoursOp}}
